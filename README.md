@@ -25,5 +25,5 @@ fn main() {
 Add this to your Cargo.toml
 ```toml
 [dependencies]
-neobmp = "0.1.5"
+neobmp = "0.1.6"
 ```
