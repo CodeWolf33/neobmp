@@ -48,6 +48,7 @@ pub struct BmpImg {
 }
 
 pub trait ToBytes {
+    /// Turns the struct into bytes
     fn to_bytes(&self) -> Vec<u8>;
 }
 
@@ -85,6 +86,16 @@ impl ToBytes for BmpImg {
 }
 
 impl BmpImg {
+    /// Fills the whole image with the desired RGB values
+    pub fn fill_image(&mut self, r: BYTE, g: BYTE, b: BYTE) {
+        for rgb in &mut self.pixels {
+            rgb.rgbt_blue = b;
+            rgb.rgbt_green = g;
+            rgb.rgbt_red = r;
+        }
+    }
+
+    /// Creates a new [`BmpImg`].
     pub fn new(height: i32, width: i32) -> Self {
         Self {
             infoheader: BITMAPINFOHEADER {
@@ -118,14 +129,11 @@ impl BmpImg {
         }
     }
 
-    pub fn fill_image(&mut self, r: BYTE, g: BYTE, b: BYTE) {
-        for rgb in &mut self.pixels {
-            rgb.rgbt_blue = b;
-            rgb.rgbt_green = g;
-            rgb.rgbt_red = r;
-        }
-    }
-
+    /// Writes all the structs to a file pointed to by the [`path`] argument
+    ///
+    /// # Panics
+    ///
+    /// Panics if creating the file fails or if the structs cant't be written to the file
     pub fn write_to_file(&self, path: &str) {
         let path = std::path::Path::new(path);
 
