@@ -1,6 +1,6 @@
 [package]
 name = "neobmp"
-version = "0.1.0"
+version = "0.1.5"
 edition = "2021"
 description = "A new library to simplify the creation and modification of .BMP files"
 license = "MIT"
