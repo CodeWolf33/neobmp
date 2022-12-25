@@ -5,8 +5,9 @@ NeoBmp is a library to simplify operations with the `.bmp` file format.
 This crate includes the following:
 
     - Structures to build your own BMP image.
-    - A generic BmpImg struct to create them all automatically and group them.
-    - Helpers to serialize all the structs AND the whole image [.to_bytes()]
+    - A generic `BmpImg` struct to create them all automatically and group them.
+    - Helpers to serialize all the structs AND the whole image .to_bytes()
+    - Helpers to write to a file and read from a file
 
 Example usage:
 
@@ -19,11 +20,13 @@ fn main() {
     bmp_img.fill_image(255, 0, 125);
 
     bmp_img.write_to_file("something.bmp");
+
+    let mut another_bmp = BmpImg::from_file("something.bmp");
 }
 ```
 
 Add this to your Cargo.toml
 ```toml
 [dependencies]
-neobmp = "0.1.6"
+neobmp = "0.2.0"
 ```
