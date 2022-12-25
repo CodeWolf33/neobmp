@@ -132,7 +132,7 @@ impl BmpImg {
         }
     }
 
-    /// Writes all the structs to a file pointed to by the [`path`] argument
+    /// Writes all the structs to a file pointed to by the `path` argument
     ///
     /// # Panics
     ///
@@ -155,6 +155,11 @@ impl BmpImg {
         };
     }
 
+    /// Reads `BMP` file data from file and returns a `BmpImg` struct.
+    ///
+    /// # Panics
+    ///
+    /// Panics if opening the file in RW mode fails. Also panics if reading any of the struct fails.
     pub fn from_file(path: &str) -> BmpImg {
         let path = std::path::Path::new(path);
 
