@@ -1,4 +1,7 @@
-use std::{io::{Write, Read, Seek}, mem::transmute};
+use std::{
+    io::{Read, Seek, Write},
+    mem::transmute,
+};
 
 type BYTE = u8;
 type DWORD = u32;
@@ -138,13 +141,17 @@ impl BmpImg {
         let path = std::path::Path::new(path);
 
         let mut fd = match std::fs::File::create(path) {
-            Ok(f) => {f},
-            Err(e) => {panic!("Oops -> {e}")},
+            Ok(f) => f,
+            Err(e) => {
+                panic!("Oops -> {e}")
+            }
         };
 
         match fd.write(&self.to_bytes()) {
-            Ok(_) => {},
-            Err(e) => {panic!("Oops -> {e}")},
+            Ok(_) => {}
+            Err(e) => {
+                panic!("Oops -> {e}")
+            }
         };
     }
 
@@ -152,25 +159,31 @@ impl BmpImg {
         let path = std::path::Path::new(path);
 
         let mut fd = match std::fs::File::options().read(true).write(true).open(path) {
-            Ok(f) => {f},
-            Err(e) => {panic!("Oops -> {e}")},
+            Ok(f) => f,
+            Err(e) => {
+                panic!("Oops -> {e}")
+            }
         };
 
         let mut file_header: [u8; 14] = [0u8; 14];
-        fd.read(&mut file_header).expect("Failed reading file header!");
+        fd.read(&mut file_header)
+            .expect("Failed reading file header!");
 
         let mut info_header: [u8; 40] = [0u8; 40];
-        fd.seek(std::io::SeekFrom::Start(14)).expect("Failed positioning the file cursor into offset 14 (INFOHEADER)");
-        fd.read(&mut info_header).expect("Failed reading info header");
+        fd.seek(std::io::SeekFrom::Start(14))
+            .expect("Failed positioning the file cursor into offset 14 (INFOHEADER)");
+        fd.read(&mut info_header)
+            .expect("Failed reading info header");
 
         let mut rgb_vec: Vec<u8> = vec![];
-        fd.seek(std::io::SeekFrom::Start(54)).expect("Failed positioning the file cursor into offset 54 (start of RGB info)");
+        fd.seek(std::io::SeekFrom::Start(54))
+            .expect("Failed positioning the file cursor into offset 54 (start of RGB info)");
         fd.read_to_end(&mut rgb_vec).expect("Failed reading RGB");
 
-        BmpImg { 
-            infoheader: unsafe {transmute::<[u8; 40], BITMAPINFOHEADER>(info_header)}, 
-            fileheader: unsafe {transmute::<[u8; 14], BITMAPFILEHEADER>(file_header)}, 
-            pixels: unsafe {transmute::<Vec<u8>, Vec<RGBTRIPLE>>(rgb_vec)}, 
+        BmpImg {
+            infoheader: unsafe { transmute::<[u8; 40], BITMAPINFOHEADER>(info_header) },
+            fileheader: unsafe { transmute::<[u8; 14], BITMAPFILEHEADER>(file_header) },
+            pixels: unsafe { transmute::<Vec<u8>, Vec<RGBTRIPLE>>(rgb_vec) },
         }
     }
 }
